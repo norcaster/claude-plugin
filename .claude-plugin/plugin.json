@@ -1,0 +1,38 @@
+{
+  "name": "norcaster",
+  "version": "0.3.0",
+  "displayName": "Norcaster Companion",
+  "description": "Route Claude Code through the Norcaster AI Runtime Control Plane: guided setup, pre-submit prompt checks, a governed status line, enforcement notifications with Decision Audit links, and permissioned one-time forwarding.",
+  "author": { "name": "Norcaster", "url": "https://www.norcaster.com" },
+  "homepage": "https://www.norcaster.com",
+  "repository": "https://github.com/norcaster/claude-plugin",
+  "license": "MIT",
+  "keywords": ["norcaster", "ai-governance", "runtime-control-plane", "gateway", "decision-audit"],
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "title": "Norcaster API key",
+      "description": "Your personal Norcaster API key. One key per developer is what makes Decision Audit attribution per-developer. Recommended: a key bound to your deployment, created at https://www.norcaster.com/dashboard/connect-tool?tool=claude_code (scopes runs:write and deployments:read); then leave the deployment ID empty. A key from Settings → API keys works too, with the deployment ID set (add deployments:write there for simulate_policy).",
+      "sensitive": true,
+      "required": true
+    },
+    "deployment_id": {
+      "type": "string",
+      "title": "Deployment ID",
+      "description": "The gateway deployment to bind and watch. Leave it empty when your API key is bound to exactly one deployment: the gateway then uses that one, and configure writes no X-Norcaster-Deployment-Id header. Otherwise it is needed.",
+      "required": false
+    },
+    "api_url": {
+      "type": "string",
+      "title": "Gateway base URL",
+      "description": "Norcaster gateway base URL. Self-hosted: point at yours.",
+      "default": "https://api.norcaster.com"
+    },
+    "portal_url": {
+      "type": "string",
+      "title": "Portal base URL",
+      "description": "Norcaster portal base URL, used for Decision Audit links.",
+      "default": "https://www.norcaster.com"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "norcaster",
+  "owner": {
+    "name": "Norcaster",
+    "email": "support@norcaster.com",
+    "url": "https://www.norcaster.com"
+  },
+  "metadata": {
+    "description": "Norcaster plugins for Claude Code: route your assistant through the AI Runtime Control Plane."
+  },
+  "plugins": [
+    {
+      "name": "norcaster",
+      "source": "./",
+      "description": "Norcaster Companion: guided gateway setup, a status line, block notifications with Decision Audit links, and permissioned one-time forwarding.",
+      "category": "security",
+      "keywords": [
+        "norcaster",
+        "ai-governance",
+        "runtime-control-plane",
+        "gateway"
+      ]
+    }
+  ]
+}

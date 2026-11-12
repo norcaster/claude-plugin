@@ -1,0 +1,20 @@
+{
+  "name": "@norcaster/claude-norcaster",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "description": "Norcaster Companion for Claude Code: gateway routing, pre-submit prompt checks, and policy visibility through the AI Runtime Control Plane.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/norcaster/claude-plugin.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "lint": "sh -c 'for f in server/*.mjs scripts/*.mjs lib/*.mjs; do node --check \"$f\" || exit 1; done'",
+    "validate": "claude plugin validate . --strict"
+  }
+}
