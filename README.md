@@ -38,7 +38,7 @@ It shows every file and setting it will change, and writes nothing until you say
 
 ## What this plugin changes, runs and sends
 
-**After you confirm `/norcaster:configure`, Claude Code's model requests go through the gateway.** That includes your prompts, the code and files in context, and tool results. The gateway applies your organization's rules, records the decision, and forwards allowed requests to the AI provider your organization connected. Norcaster's [privacy policy](https://www.norcaster.com/legal/privacy) covers how that data is handled.
+**After you confirm `/norcaster:configure`, Claude Code's model requests go through the gateway.** That includes your prompts, the code and files in context, and tool results. The gateway applies your organization's rules, records the decision, and forwards allowed requests to the AI provider your organization connected. It also keeps a trace of each request, including the prompt and the answer text, in your organization's Norcaster account. Traces are kept for as long as your organization's retention setting says, 90 days by default and at most one year. Norcaster's [privacy policy](https://www.norcaster.com/legal/privacy) covers how that data is handled.
 
 **On your machine, setup writes:**
 
