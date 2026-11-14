@@ -5,7 +5,7 @@
  * Hand-rolled JSON-RPC 2.0 over newline-delimited stdio, deliberately free of
  * dependencies: the plugin installs from a git checkout with no build step.
  * The API key arrives from the plugin's user configuration through .mcp.json
- * (NORCASTER_API_KEY), so it never enters the transcript.
+ * (CLAUDE_PLUGIN_OPTION_API_KEY), so it never enters the transcript.
  *
  * Scope (deliberate, same as the VS Code extension): setup and visibility.
  * Nothing here can weaken policy; forward_once approves one audited retry the

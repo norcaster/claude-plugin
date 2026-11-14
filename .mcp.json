@@ -4,10 +4,10 @@
       "command": "node",
       "args": ["${CLAUDE_PLUGIN_ROOT}/server/index.mjs"],
       "env": {
-        "NORCASTER_API_KEY": "${user_config.api_key}",
-        "NORCASTER_DEPLOYMENT_ID": "${user_config.deployment_id}",
-        "NORCASTER_API_URL": "${user_config.api_url}",
-        "NORCASTER_PORTAL_URL": "${user_config.portal_url}"
+        "CLAUDE_PLUGIN_OPTION_API_KEY": "${user_config.api_key}",
+        "CLAUDE_PLUGIN_OPTION_DEPLOYMENT_ID": "${user_config.deployment_id}",
+        "CLAUDE_PLUGIN_OPTION_API_URL": "${user_config.api_url}",
+        "CLAUDE_PLUGIN_OPTION_PORTAL_URL": "${user_config.portal_url}"
       }
     }
   }

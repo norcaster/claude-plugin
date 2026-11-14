@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1 — 2026-11-13
+
+- The plugin uses only its own key: the one you enter with `/plugin configure`, or the one `/norcaster:configure` stored. It no longer reads an `ANTHROPIC_AUTH_TOKEN` or `NORCASTER_API_KEY` exported in your shell, so it never sends a credential it wasn't given. This follows the Claude plugin directory's policy.
+- The MCP server gets its settings as `CLAUDE_PLUGIN_OPTION_*`, the names the directory accepts. `NORCASTER_API_KEY`, `NORCASTER_DEPLOYMENT_ID`, `NORCASTER_API_URL` and `NORCASTER_PORTAL_URL` are no longer read.
+- `package.json` no longer has `scripts`; CI runs the syntax check and tests directly.
+
 ## 0.3.0 — 2026-11-07
 
 - Check gateway-routed prompts through `POST /v1/policy/check` before Claude Code adds them to model context. A rejected prompt no longer causes the next clean question to be blocked because it was resent in history.

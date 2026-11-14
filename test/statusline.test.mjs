@@ -120,3 +120,25 @@ test("helper mode: the token comes from apiKeyHelper; a failing helper shows no-
   assert.equal(m2.state, "no-credential");
   assert.match(strip(render(m2)), /no credential found/);
 });
+
+test("a token exported in the user's shell is never read (directory policy)", async () => {
+  const home = freshHome();
+  install(home, { settings: { env: { ANTHROPIC_BASE_URL: "https://api.example.test" }, apiKeyHelper: "echo ncr_from_helper" } });
+  let seen;
+  const m = await computeModel({
+    env: { ANTHROPIC_BASE_URL: "https://api.example.test", ANTHROPIC_AUTH_TOKEN: "ncr_from_shell" },
+    keyState: async (_url, token) => ((seen = token), "governed"),
+  });
+  assert.equal(m.state, "governed");
+  assert.equal(seen, "ncr_from_helper", "the stored key, not the shell's");
+
+  const home2 = freshHome();
+  install(home2, { settings: { env: { ANTHROPIC_BASE_URL: "https://api.example.test" } } });
+  let checked = false;
+  const m2 = await computeModel({
+    env: { ANTHROPIC_AUTH_TOKEN: "ncr_from_shell" },
+    keyState: async () => ((checked = true), "governed"),
+  });
+  assert.equal(m2.state, "no-credential");
+  assert.equal(checked, false, "the shell's token is never sent to the gateway");
+});

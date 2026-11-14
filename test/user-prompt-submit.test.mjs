@@ -16,13 +16,10 @@ async function setup(t, options = {}) {
   t.after(async () => { await gw.close(); fs.rmSync(home, { recursive: true, force: true }); });
   const env = {
     ...process.env, HOME: home,
-    NORCASTER_API_KEY: "", NORCASTER_DEPLOYMENT_ID: "", NORCASTER_API_URL: "", NORCASTER_PORTAL_URL: "",
     CLAUDE_PLUGIN_OPTION_API_KEY: "ncr_test", CLAUDE_PLUGIN_OPTION_DEPLOYMENT_ID: "",
     CLAUDE_PLUGIN_OPTION_API_URL: gw.url, CLAUDE_PLUGIN_OPTION_PORTAL_URL: "https://portal.example.test",
     ANTHROPIC_BASE_URL: gw.url, ANTHROPIC_AUTH_TOKEN: "", ANTHROPIC_CUSTOM_HEADERS: "",
   };
-  // The empty NORCASTER_* variables above must not shadow plugin option values.
-  for (const key of Object.keys(env)) if (key.startsWith("NORCASTER_")) delete env[key];
   return { home, gw, env };
 }
 
@@ -113,4 +110,19 @@ test("manifest blocks on hook crashes and timeouts", () => {
   assert.equal(hook.onFailure, "block");
   assert.equal(hook.timeout, 15);
   assert.deepEqual(hook.args, ["${CLAUDE_PLUGIN_ROOT}/scripts/user-prompt-submit.mjs"]);
+});
+
+test("a token exported in the user's shell is never read or sent (directory policy)", async (t) => {
+  const { env, gw } = await setup(t, { validKey: "ncr_shell_token" });
+  // No plugin key and nothing stored by /norcaster:configure: only the shell holds a token.
+  const shell = { ...env, CLAUDE_PLUGIN_OPTION_API_KEY: "", ANTHROPIC_AUTH_TOKEN: "ncr_shell_token" };
+  const out = assertBlocked(await run(shell, { prompt: "which branch are we working on?" }));
+  assert.match(out.reason, /could not check/i);
+  assert.equal(gw.calls.length, 0, "nothing is sent with the shell's token");
+
+  // With the plugin's own key the shell token is ignored, not added.
+  const both = { ...env, CLAUDE_PLUGIN_OPTION_API_KEY: "ncr_test", ANTHROPIC_AUTH_TOKEN: "ncr_shell_token" };
+  await run(both, { prompt: "which branch are we working on?" });
+  assert.equal(gw.calls.length, 1);
+  assert.equal(gw.calls[0].headers.authorization, "Bearer ncr_test");
 });

@@ -9,10 +9,10 @@ import { shape } from "../server/console-tools.mjs";
 
 const env = (gw) => ({
   HOME: fs.mkdtempSync(path.join(os.tmpdir(), "ncr-console-")),
-  NORCASTER_API_KEY: "ncr_test",
-  NORCASTER_DEPLOYMENT_ID: "dep-1",
-  NORCASTER_API_URL: gw.url,
-  NORCASTER_PORTAL_URL: "https://portal.example.test",
+  CLAUDE_PLUGIN_OPTION_API_KEY: "ncr_test",
+  CLAUDE_PLUGIN_OPTION_DEPLOYMENT_ID: "dep-1",
+  CLAUDE_PLUGIN_OPTION_API_URL: gw.url,
+  CLAUDE_PLUGIN_OPTION_PORTAL_URL: "https://portal.example.test",
   NORCASTER_CREDENTIAL_STORE: "file",
   ANTHROPIC_BASE_URL: "",
   ANTHROPIC_AUTH_TOKEN: "",

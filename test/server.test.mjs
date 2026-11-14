@@ -9,10 +9,10 @@ import { startServer } from "./mcp-client.mjs";
 const freshHome = () => fs.mkdtempSync(path.join(os.tmpdir(), "ncr-srv-"));
 const env = (gw, home, extra = {}) => ({
   HOME: home,
-  NORCASTER_API_KEY: "ncr_test",
-  NORCASTER_DEPLOYMENT_ID: "dep-1",
-  NORCASTER_API_URL: gw.url,
-  NORCASTER_PORTAL_URL: "https://portal.example.test",
+  CLAUDE_PLUGIN_OPTION_API_KEY: "ncr_test",
+  CLAUDE_PLUGIN_OPTION_DEPLOYMENT_ID: "dep-1",
+  CLAUDE_PLUGIN_OPTION_API_URL: gw.url,
+  CLAUDE_PLUGIN_OPTION_PORTAL_URL: "https://portal.example.test",
   NORCASTER_CREDENTIAL_STORE: "file",
   ANTHROPIC_BASE_URL: "",
   ANTHROPIC_AUTH_TOKEN: "",
@@ -154,7 +154,7 @@ test("configure plan then apply writes settings; status flips to governed; remov
 test("a key bound to one deployment needs no deployment ID and gets no deployment header", async (t) => {
   const home = freshHome();
   const gw = await startFakeGateway({ keyBinding: ["dep-1"], events: [blockedEvent()] });
-  const srv = startServer(env(gw, home, { NORCASTER_DEPLOYMENT_ID: "" }));
+  const srv = startServer(env(gw, home, { CLAUDE_PLUGIN_OPTION_DEPLOYMENT_ID: "" }));
   t.after(async () => {
     srv.close();
     await gw.close();
@@ -190,7 +190,7 @@ test("a bound key keeps a matching deployment ID header-less and refuses a diffe
   const home = freshHome();
   const gw = await startFakeGateway({ keyBinding: ["dep-1"] });
   const same = startServer(env(gw, home));
-  const other = startServer(env(gw, home, { NORCASTER_DEPLOYMENT_ID: "dep-2" }));
+  const other = startServer(env(gw, home, { CLAUDE_PLUGIN_OPTION_DEPLOYMENT_ID: "dep-2" }));
   t.after(async () => {
     same.close();
     other.close();
@@ -216,7 +216,7 @@ test("an unbound key, or an older gateway without the api_key block, keeps the h
       { file: "~/.claude/settings.json", key: "env.ANTHROPIC_CUSTOM_HEADERS", value: "X-Norcaster-Deployment-Id: dep-1" },
     );
     assert.match(plan.data.recommendation, /dashboard\/connect-tool\?tool=claude_code/);
-    const missing = startServer(env(gw, home, { NORCASTER_DEPLOYMENT_ID: "" }));
+    const missing = startServer(env(gw, home, { CLAUDE_PLUGIN_OPTION_DEPLOYMENT_ID: "" }));
     const refused = await missing.callTool("configure_claude_code", { mode: "plan" });
     assert.equal(refused.data.ok, false);
     assert.match(refused.data.problems.join(" "), /X-Norcaster-Deployment-Id header unless the API key is bound/);
@@ -245,7 +245,7 @@ test("apply refuses to write when the gateway rejects the key", async (t) => {
 test("missing plugin configuration is reported, not guessed", async (t) => {
   const home = freshHome();
   const gw = await startFakeGateway();
-  const srv = startServer(env(gw, home, { NORCASTER_API_KEY: "", NORCASTER_DEPLOYMENT_ID: "" }));
+  const srv = startServer(env(gw, home, { CLAUDE_PLUGIN_OPTION_API_KEY: "", CLAUDE_PLUGIN_OPTION_DEPLOYMENT_ID: "" }));
   t.after(async () => {
     srv.close();
     await gw.close();

@@ -116,7 +116,8 @@ export async function computeModel({ env = process.env, now = Date.now(), keySta
   const liveBase = normalizeUrl(env.ANTHROPIC_BASE_URL);
   const storedBase = normalizeUrl(settingsEnv.ANTHROPIC_BASE_URL);
   const resolveToken = () =>
-    String(env.ANTHROPIC_AUTH_TOKEN ?? settingsEnv.ANTHROPIC_AUTH_TOKEN ?? "").trim() || runHelper(settings.apiKeyHelper);
+    // The key /norcaster:configure stored; a token exported in the user's shell is never read.
+    String(settingsEnv.ANTHROPIC_AUTH_TOKEN ?? "").trim() || runHelper(settings.apiKeyHelper);
   const base = { deploymentId: cfg.deployment_id ?? "", auditUrl: decisionAuditUrl(normalizeUrl(cfg.portal_url), cfg.deployment_id ?? "") };
 
   if (liveBase && liveBase !== apiUrl) return { ...base, state: "routed-elsewhere", elsewhere: liveBase };
