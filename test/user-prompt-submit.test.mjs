@@ -6,6 +6,7 @@ import path from "node:path";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { startFakeGateway } from "./fake-gateway.mjs";
+import { childEnv } from "./child-env.mjs";
 
 const SCRIPT = fileURLToPath(new URL("../scripts/user-prompt-submit.mjs", import.meta.url));
 const SECRET = "AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
@@ -15,7 +16,7 @@ async function setup(t, options = {}) {
   const gw = await startFakeGateway(options);
   t.after(async () => { await gw.close(); fs.rmSync(home, { recursive: true, force: true }); });
   const env = {
-    ...process.env, HOME: home,
+    HOME: home,
     CLAUDE_PLUGIN_OPTION_API_KEY: "ncr_test", CLAUDE_PLUGIN_OPTION_DEPLOYMENT_ID: "",
     CLAUDE_PLUGIN_OPTION_API_URL: gw.url, CLAUDE_PLUGIN_OPTION_PORTAL_URL: "https://portal.example.test",
     ANTHROPIC_BASE_URL: gw.url, ANTHROPIC_AUTH_TOKEN: "", ANTHROPIC_CUSTOM_HEADERS: "",
@@ -25,7 +26,7 @@ async function setup(t, options = {}) {
 
 function run(env, input) {
   return new Promise((resolve, reject) => {
-    const child = spawn(process.execPath, [SCRIPT], { env, stdio: ["pipe", "pipe", "pipe"] });
+    const child = spawn(process.execPath, [SCRIPT], { env: childEnv(env), stdio: ["pipe", "pipe", "pipe"] });
     let stdout = "", stderr = "";
     child.stdout.on("data", (d) => { stdout += d; });
     child.stderr.on("data", (d) => { stderr += d; });

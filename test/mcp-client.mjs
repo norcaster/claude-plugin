@@ -1,11 +1,12 @@
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { childEnv } from "./child-env.mjs";
 
 const SERVER = fileURLToPath(new URL("../server/index.mjs", import.meta.url));
 
 /** Drive the stdio MCP server the way Claude Code does: one JSON-RPC message per line. */
 export function startServer(env) {
-  const child = spawn(process.execPath, [SERVER], { env: { ...process.env, ...env }, stdio: ["pipe", "pipe", "pipe"] });
+  const child = spawn(process.execPath, [SERVER], { env: childEnv(env), stdio: ["pipe", "pipe", "pipe"] });
   const pending = new Map();
   let buffer = "";
   let nextId = 1;

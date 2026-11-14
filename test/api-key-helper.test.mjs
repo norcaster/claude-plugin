@@ -5,6 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { childEnv } from "./child-env.mjs";
 
 const HELPER_SRC = fileURLToPath(new URL("../scripts/api-key-helper.mjs", import.meta.url));
 const STATUSLINE_SRC = fileURLToPath(new URL("../scripts/statusline.mjs", import.meta.url));
@@ -34,7 +35,7 @@ test("file store: the installed helper prints the key and nothing else; remove d
   assert.equal(settings.apiKeyHelper, `node "${helper}"`);
 
   // Run exactly what Claude Code runs.
-  const r = spawnSync(settings.apiKeyHelper, { shell: true, encoding: "utf8", env: { ...process.env, HOME: home } });
+  const r = spawnSync(settings.apiKeyHelper, { shell: true, encoding: "utf8", env: childEnv({ HOME: home }) });
   assert.equal(r.status, 0, r.stderr);
   assert.equal(r.stdout, "ncr_from_file\n");
   assert.equal(r.stderr, "");
@@ -46,6 +47,6 @@ test("file store: the installed helper prints the key and nothing else; remove d
   assert.equal(fs.existsSync(keyFile), false);
   const after = JSON.parse(fs.readFileSync(path.join(home, ".claude", "settings.json"), "utf8"));
   assert.equal("apiKeyHelper" in after, false);
-  const gone = spawnSync(process.execPath, [helper], { encoding: "utf8", env: { ...process.env, HOME: home } });
+  const gone = spawnSync(process.execPath, [helper], { encoding: "utf8", env: childEnv({ HOME: home }) });
   assert.notEqual(gone.status, 0, "helper is gone with the state dir");
 });

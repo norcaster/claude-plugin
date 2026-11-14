@@ -6,6 +6,7 @@ import path from "node:path";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { blockedEvent, startFakeGateway } from "./fake-gateway.mjs";
+import { childEnv } from "./child-env.mjs";
 
 const SCRIPT = fileURLToPath(new URL("../scripts/stop-failure.mjs", import.meta.url));
 const SESSION_START = fileURLToPath(new URL("../scripts/session-start.mjs", import.meta.url));
@@ -17,7 +18,7 @@ const lastBlock = (home) => path.join(home, ".claude", "norcaster", "last-block.
 function run(script, env, input) {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, [script], {
-      env: { ...process.env, ANTHROPIC_BASE_URL: "", ANTHROPIC_AUTH_TOKEN: "", ANTHROPIC_CUSTOM_HEADERS: "", ...env },
+      env: childEnv(env),
       stdio: ["pipe", "pipe", "pipe"],
     });
     let stdout = "";
