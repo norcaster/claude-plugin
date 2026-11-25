@@ -5,7 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { startFakeGateway } from "./fake-gateway.mjs";
 import { startServer } from "./mcp-client.mjs";
-import { shape } from "../server/console-tools.mjs";
+import { shape } from "../plugin/server/console-tools.mjs";
 
 const env = (gw) => ({
   HOME: fs.mkdtempSync(path.join(os.tmpdir(), "ncr-console-")),

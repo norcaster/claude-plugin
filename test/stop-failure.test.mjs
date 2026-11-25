@@ -8,9 +8,9 @@ import { fileURLToPath } from "node:url";
 import { blockedEvent, startFakeGateway } from "./fake-gateway.mjs";
 import { childEnv } from "./child-env.mjs";
 
-const SCRIPT = fileURLToPath(new URL("../scripts/stop-failure.mjs", import.meta.url));
-const SESSION_START = fileURLToPath(new URL("../scripts/session-start.mjs", import.meta.url));
-const { notificationSequence } = await import("../scripts/stop-failure.mjs");
+const SCRIPT = fileURLToPath(new URL("../plugin/scripts/stop-failure.mjs", import.meta.url));
+const SESSION_START = fileURLToPath(new URL("../plugin/scripts/session-start.mjs", import.meta.url));
+const { notificationSequence } = await import("../plugin/scripts/stop-failure.mjs");
 
 const freshHome = () => fs.mkdtempSync(path.join(os.tmpdir(), "ncr-hook-"));
 const lastBlock = (home) => path.join(home, ".claude", "norcaster", "last-block.json");

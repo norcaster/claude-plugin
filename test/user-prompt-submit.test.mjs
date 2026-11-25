@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { startFakeGateway } from "./fake-gateway.mjs";
 import { childEnv } from "./child-env.mjs";
 
-const SCRIPT = fileURLToPath(new URL("../scripts/user-prompt-submit.mjs", import.meta.url));
+const SCRIPT = fileURLToPath(new URL("../plugin/scripts/user-prompt-submit.mjs", import.meta.url));
 const SECRET = "AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
 
 async function setup(t, options = {}) {
@@ -106,7 +106,7 @@ test("network failure blocks instead of admitting an unchecked prompt", async (t
 });
 
 test("manifest blocks on hook crashes and timeouts", () => {
-  const manifest = JSON.parse(fs.readFileSync(new URL("../hooks/hooks.json", import.meta.url)));
+  const manifest = JSON.parse(fs.readFileSync(new URL("../plugin/hooks/hooks.json", import.meta.url)));
   const hook = manifest.hooks.UserPromptSubmit[0].hooks[0];
   assert.equal(hook.onFailure, "block");
   assert.equal(hook.timeout, 15);
@@ -126,4 +126,18 @@ test("a token exported in the user's shell is never read or sent (directory poli
   await run(both, { prompt: "which branch are we working on?" });
   assert.equal(gw.calls.length, 1);
   assert.equal(gw.calls[0].headers.authorization, "Bearer ncr_test");
+});
+
+test("a key stored on the machine is never used in place of the plugin's own (directory policy)", async (t) => {
+  const { home, env, gw } = await setup(t, { validKey: "ncr_stored" });
+  // Routing lives only in settings.json, which also holds a token and a key helper.
+  fs.mkdirSync(path.join(home, ".claude"), { recursive: true });
+  fs.writeFileSync(path.join(home, ".claude", "settings.json"), JSON.stringify({
+    env: { ANTHROPIC_BASE_URL: gw.url, ANTHROPIC_AUTH_TOKEN: "ncr_stored" },
+    apiKeyHelper: "echo ncr_stored",
+  }));
+  const stored = { ...env, ANTHROPIC_BASE_URL: "", CLAUDE_PLUGIN_OPTION_API_KEY: "" };
+  const out = assertBlocked(await run(stored, { prompt: "which branch are we working on?" }));
+  assert.match(out.reason, /could not check/i);
+  assert.equal(gw.calls.length, 0, "nothing is sent with a stored key");
 });

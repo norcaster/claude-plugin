@@ -1,6 +1,6 @@
 {
   "name": "norcaster",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "displayName": "Norcaster Companion",
   "description": "Route Claude Code through the Norcaster AI Runtime Control Plane: guided setup, pre-submit prompt checks, a governed status line, enforcement notifications with Decision Audit links, and permissioned one-time forwarding.",
   "author": { "name": "Norcaster", "url": "https://www.norcaster.com" },

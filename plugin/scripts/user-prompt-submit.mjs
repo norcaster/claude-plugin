@@ -38,7 +38,7 @@ export async function main(env = process.env, stdin = "") {
   if (input.prompt.length > 1_000_000) {
     return block("Norcaster: this prompt is too large to check. Shorten it to at most 1,000,000 characters and submit it again.");
   }
-  const apiKey = resolveApiKey(cfg, routing);
+  const apiKey = resolveApiKey(cfg);
   if (!apiKey) return block(UNAVAILABLE);
   // An absent header lets the server resolve the key's single deployment binding.
   const deploymentId = active.deploymentId || cfg.deploymentId || routing.stateConfig?.deployment_id || "";

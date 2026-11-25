@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-const { computeModel, render } = await import("../scripts/statusline.mjs");
+const { computeModel, render } = await import("../plugin/scripts/statusline.mjs");
 
 const strip = (s) => s.replace(/\x1b\[[0-9;]*m/g, "").replace(/\x1b\]8;;[^\x1b]*\x1b\\/g, "");
 

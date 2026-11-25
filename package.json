@@ -1,6 +1,6 @@
 {
   "name": "@norcaster/claude-norcaster",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": true,
   "type": "module",
   "description": "Norcaster Companion for Claude Code: gateway routing, pre-submit prompt checks, and policy visibility through the AI Runtime Control Plane.",

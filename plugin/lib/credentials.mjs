@@ -10,7 +10,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { execFileSync, spawnSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { stateDir } from "./paths.mjs";
 
 export const KEYCHAIN_SERVICE = "norcaster-claude-code";
@@ -92,15 +92,4 @@ export function storeFor(name) {
 
 export function describeStore(name) {
   return name === "keychain" ? "the macOS Keychain" : "an owner-only file under ~/.claude/norcaster";
-}
-
-/** Run whatever apiKeyHelper settings.json names, the way Claude Code does. Empty string on failure. */
-export function runHelper(command) {
-  if (typeof command !== "string" || !command.trim()) return "";
-  try {
-    const r = spawnSync(command, { shell: true, encoding: "utf8", timeout: 4000, stdio: ["ignore", "pipe", "ignore"] });
-    return r.status === 0 ? String(r.stdout ?? "").trim() : "";
-  } catch {
-    return "";
-  }
 }

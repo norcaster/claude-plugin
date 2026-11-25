@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "norcaster",
-      "source": "./",
+      "source": "./plugin",
       "description": "Norcaster Companion: guided gateway setup, a status line, block notifications with Decision Audit links, and permissioned one-time forwarding.",
       "category": "security",
       "keywords": [

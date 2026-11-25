@@ -7,9 +7,9 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { childEnv } from "./child-env.mjs";
 
-const HELPER_SRC = fileURLToPath(new URL("../scripts/api-key-helper.mjs", import.meta.url));
-const STATUSLINE_SRC = fileURLToPath(new URL("../scripts/statusline.mjs", import.meta.url));
-const { applyConfigure, applyRemove } = await import("../lib/claude-settings.mjs");
+const HELPER_SRC = fileURLToPath(new URL("../plugin/scripts/api-key-helper.mjs", import.meta.url));
+const STATUSLINE_SRC = fileURLToPath(new URL("../plugin/scripts/statusline.mjs", import.meta.url));
+const { applyConfigure, applyRemove } = await import("../plugin/lib/claude-settings.mjs");
 
 test("file store: the installed helper prints the key and nothing else; remove deletes it", () => {
   const home = fs.mkdtempSync(path.join(os.tmpdir(), "ncr-helper-"));

@@ -1,6 +1,5 @@
 import { DEFAULT_API_URL, DEFAULT_PORTAL_URL, normalizeUrl, stateConfigPath, userSettingsPath } from "./paths.mjs";
 import { readJsonFile } from "./json-file.mjs";
-import { runHelper } from "./credentials.mjs";
 
 /**
  * Plugin configuration: the user's /plugin configure options, as Claude Code exports them to
@@ -74,11 +73,11 @@ export function isRoutedTo(routing, apiUrl) {
 }
 
 /**
- * The key a hook should use: the plugin's own configuration first, then the key
- * /norcaster:configure stored, as a token in settings.json (env mode) or behind the
- * apiKeyHelper it installed (helper mode). A credential in the user's shell environment
- * is never read (Claude plugin directory policy).
+ * The key a hook should use: only the plugin's own api_key (userConfig, sensitive),
+ * which Claude Code passes to the hook. Nothing is read from the user's machine:
+ * not the shell, not settings.json, not the Keychain helper (Claude plugin directory
+ * policy). Without it the pre-submit check fails closed and asks for configuration.
  */
-export function resolveApiKey(cfg, routing) {
-  return cfg.apiKey || routing.stored.authToken || runHelper(routing.apiKeyHelper);
+export function resolveApiKey(cfg) {
+  return cfg.apiKey;
 }

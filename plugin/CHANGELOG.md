@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.2 — 2026-11-25
+
+- The pre-submit check and the block notification use only the key you entered with `/plugin configure`. They no longer fall back to a key that `/norcaster:configure` stored in `settings.json` or behind the key helper. Without your key the check stops the prompt and asks you to configure, as it did before when no key was found. Model requests are unchanged: Claude Code still gets the key from the helper or `settings.json`, as configured.
+- The repository has a new layout. The plugin is in `plugin/`, and the marketplace, tests and CI are beside it at the root. Install with the same commands; an installed 0.3.1 updates as usual.
+
 ## 0.3.1 — 2026-11-13
 
 - The plugin uses only its own key: the one you enter with `/plugin configure`, or the one `/norcaster:configure` stored. It no longer reads an `ANTHROPIC_AUTH_TOKEN` or `NORCASTER_API_KEY` exported in your shell, so it never sends a credential it wasn't given. This follows the Claude plugin directory's policy.

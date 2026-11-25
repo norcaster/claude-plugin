@@ -25,6 +25,6 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - name: Syntax check
-        run: for f in server/*.mjs scripts/*.mjs lib/*.mjs; do node --check "$f" || exit 1; done
+        run: for f in plugin/server/*.mjs plugin/scripts/*.mjs plugin/lib/*.mjs; do node --check "$f" || exit 1; done
       - name: Tests
         run: node --test test/*.test.mjs

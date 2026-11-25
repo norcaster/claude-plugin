@@ -5,10 +5,10 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const { planConfigure, applyConfigure, planRemove, applyRemove, isOurStatusline } = await import("../lib/claude-settings.mjs");
+const { planConfigure, applyConfigure, planRemove, applyRemove, isOurStatusline } = await import("../plugin/lib/claude-settings.mjs");
 
-const STATUSLINE_SRC = fileURLToPath(new URL("../scripts/statusline.mjs", import.meta.url));
-const HELPER_SRC = fileURLToPath(new URL("../scripts/api-key-helper.mjs", import.meta.url));
+const STATUSLINE_SRC = fileURLToPath(new URL("../plugin/scripts/statusline.mjs", import.meta.url));
+const HELPER_SRC = fileURLToPath(new URL("../plugin/scripts/api-key-helper.mjs", import.meta.url));
 // env mode: the VS Code extension's behaviour (key in settings.json). Kept explicit; the default is helper mode.
 const params = {
   apiUrl: "https://api.example.test",

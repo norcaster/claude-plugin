@@ -46,7 +46,7 @@ export async function main(env = process.env, stdin = "") {
   const cfg = pluginConfig(env);
   const routing = effectiveRouting(env);
   const apiUrl = routing.stateConfig?.api_url || cfg.apiUrl;
-  const apiKey = resolveApiKey(cfg, routing);
+  const apiKey = resolveApiKey(cfg);
   const deploymentId =
     cfg.deploymentId || routing.live.deploymentId || routing.stored.deploymentId || routing.stateConfig?.deployment_id || "";
   const now = Date.now();
